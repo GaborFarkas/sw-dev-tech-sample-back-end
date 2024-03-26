@@ -20,8 +20,10 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout']);
-Route::post('refresh', [AuthController::class, 'refresh']);
+Route::get('login', [AuthController::class, 'login_get']);
+Route::post('login', [AuthController::class, 'login_post']);
+Route::get('logout', [AuthController::class, 'logout']);
+Route::get('refresh', [AuthController::class, 'refresh']);
+Route::post('register', [AuthController::class, 'register']);
 
 Route::get('test', [TestController::class, 'test']);
