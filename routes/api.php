@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,10 +19,10 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
-Route::get('login', [AuthController::class, 'login_get']);
-Route::post('login', [AuthController::class, 'login_post']);
-Route::get('logout', [AuthController::class, 'logout']);
-Route::get('refresh', [AuthController::class, 'refresh']);
-Route::post('register', [AuthController::class, 'register']);
+Route::get('v1/login', [AuthController::class, 'login_get']);
+Route::post('v1/login', [AuthController::class, 'login_post']);
+Route::get('v1/logout', [AuthController::class, 'logout']);
+Route::get('v1/refresh', [AuthController::class, 'refresh']);
+Route::post('v1/register', [AuthController::class, 'register']);
 
-Route::get('test', [TestController::class, 'test']);
+Route::get('v1/test', [TestController::class, 'test']);
