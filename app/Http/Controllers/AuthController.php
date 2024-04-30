@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\ErrorResponse;
 use App\Models\JwtResponse;
 use App\Models\SuccessResponse;
 use App\Models\UserResponse;
+use App\Models\UserRoleMapping;
 
 class AuthController extends Controller
 {
@@ -31,14 +34,25 @@ class AuthController extends Controller
             return response()->json(new ErrorResponse('Unauthorized'), 401);
         }
 
-        return response()->json(new JwtResponse($token, $this->getExpiration()));
+        // Encode roles into the JWT token.
+        $user = Auth::user();
+        $roles = [];
+        foreach ($user->roles as $roleMapping) {
+            $roles[] = $roleMapping->role_id;
+        }
+        $claimToken = Auth::claims(['roles' => $roles])->attempt($credentials);
+
+        $responseData = new JwtResponse($claimToken, $this->getExpiration());
+
+        return response()->json(new DataResponse($responseData));
     }
 
     public function login_get()
     {
         $user = Auth::user();
+        $responseData = new UserResponse($user);
 
-        return response()->json(new UserResponse($user));
+        return response()->json(new DataResponse($responseData));
     }
 
     public function register(Request $request)
@@ -49,11 +63,21 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        DB::transaction(function() use($request) {
+            /**
+             * @var User
+             */
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            UserRoleMapping::create([
+                'user_id' => $user->id,
+                'role_id' => 1
+            ]);
+        });
 
         return response()->json(new SuccessResponse());
     }
@@ -66,7 +90,8 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        return response()->json(new JwtResponse(Auth::refresh(), $this->getExpiration()));
+        $responseData = new JwtResponse(Auth::refresh(), $this->getExpiration());
+        return response()->json(new DataResponse($responseData));
     }
 
     /**

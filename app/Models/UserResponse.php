@@ -5,7 +5,7 @@ namespace App\Models;
 /**
  * Reponse model with user data.
  */
-class UserResponse extends JsonResponse {
+class UserResponse {
     /**
      * User's name
      * @var string
@@ -22,7 +22,6 @@ class UserResponse extends JsonResponse {
      */
     public function __construct($user)
     {
-        $this->status = ResponseType::Success;
         $this->name = $user->name;
         $this->email = $user->email;
     }

@@ -5,7 +5,7 @@ namespace App\Models;
 /**
  * A response model containing a JWT token with an expiration time.
  */
-class JwtResponse extends JsonResponse {
+class JwtResponse {
     /**
      * The JWT token.
      * @var string
@@ -30,7 +30,6 @@ class JwtResponse extends JsonResponse {
      */
     public function __construct($token, $expiration)
     {
-        $this->status = ResponseType::Success;
         $this->access_token = $token;
         $this->expires_in = $expiration;
     }

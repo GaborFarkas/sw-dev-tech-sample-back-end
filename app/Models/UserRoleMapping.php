@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserRoleMapping extends Model
 {
@@ -18,4 +19,12 @@ class UserRoleMapping extends Model
         'user_id',
         'role_id'
     ];
+
+    /**
+     * Get the roles for the user.
+     */
+    public function role(): HasOne
+    {
+        return $this->hasOne(Role::class);
+    }
 }
