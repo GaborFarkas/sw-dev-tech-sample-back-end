@@ -5,13 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\DataResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
 use App\Models\ErrorResponse;
 use App\Models\Job;
 use App\Models\SuccessResponse;
-use App\Models\UserResponse;
 
 class JobsController extends Controller
 {

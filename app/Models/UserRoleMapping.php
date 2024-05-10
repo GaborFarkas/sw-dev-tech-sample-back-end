@@ -25,6 +25,6 @@ class UserRoleMapping extends Model
      */
     public function role(): HasOne
     {
-        return $this->hasOne(Role::class);
+        return $this->hasOne(Role::class, 'id', 'role_id');
     }
 }
